@@ -6,13 +6,13 @@ public class BikeDDValuationPolicy implements ValuationPolicy() {
     private int bikeAgeInYears;
     private double depreciationRate;
 // Constructors ----------------------------------------------------
-    public DDBDecreciation() {
+    public BikeDDValuationPolicy() {
     	this.originalReplacementValue = new BigDecimal(0.0);
         this.bikeAgeInYears = 0;
         this.depreciationRate = 0.0;
     }
 
-    public DDBDecreciation(BigDecimal originalReplacementValue, int bikeAgeInYears, double depreciationRate){
+    public BikeDDValuationPolicy(BigDecimal originalReplacementValue, int bikeAgeInYears, double depreciationRate){
     	this.originalReplacementValue = originalReplacementValue;
         this.bikeAgeInYears = bikeAgeInYears;
         this.depreciationRate = depreciationRate;
