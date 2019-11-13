@@ -41,9 +41,8 @@ public class BikeWithDDValuationPolicy extends Bike implements ValuationPolicy {
         BigDecimal depFactor = new BigDecimal(1 - 2.0 * depreciationRate);
         BigDecimal doubleDecliningBalanceValue = depFactor.pow(bikeAgeInYears).multiply(originalReplacementValue);
         
-        /**
-         * The BigDecimal value always rounds to next number depending on the value
-         * and formats the BigDecimal value to 2 decimal places
+        /** The BigDecimal value always rounds to next number depending on the value
+         *  and formats the BigDecimal value to 2 decimal places
          */
         doubleDecliningBalanceValue = doubleDecliningBalanceValue.setScale(2, RoundingMode.HALF_EVEN);
         return doubleDecliningBalanceValue;

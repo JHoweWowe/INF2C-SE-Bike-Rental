@@ -44,9 +44,8 @@ public class BikeWithLDValuationPolicy extends Bike implements ValuationPolicy {
         BigDecimal difference = new BigDecimal(depreciationRate * bikeAgeInYears).multiply(originalReplacementValue); 
         BigDecimal newReplacementValue = originalReplacementValue.subtract(difference);
         
-        /**
-         * The BigDecimal value always rounds to next number depending on the value
-         * and formats the BigDecimal value to 2 decimal places
+        /** The BigDecimal value always rounds to next number depending on the value
+         *  and formats the BigDecimal value to 2 decimal places
          */
         newReplacementValue = newReplacementValue.setScale(2, RoundingMode.HALF_EVEN);
                 

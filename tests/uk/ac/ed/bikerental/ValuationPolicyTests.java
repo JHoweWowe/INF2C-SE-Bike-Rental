@@ -8,39 +8,51 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.*;
 
 public class ValuationPolicyTests {
-    // You can add attributes here
     
+    private BikeWithLDValuationPolicy bikeLD;
+    private BikeWithDDValuationPolicy bikeDD;
+    private String stringDate;
+    private LocalDate localDate;
     
-
+    /**
+     * Test environment must be setup properly. Classes should be initialised properly.
+     * Bikes with each respective valuation policy should be constructed with default values.
+     * Default localDate value should be set to current date & time for simple purposes
+     * 
+     * TODO: Identify what values/fields should @throws Exception (Perhaps negative values?)
+     * 
+     */
+    
     @BeforeEach
     void setUp() throws Exception {
-        // Put setup here
+        bikeLD = new BikeWithLDValuationPolicy();
+        bikeDD = new BikeWithDDValuationPolicy();
+        localDate = LocalDate.now();
+        
+        assertNotNull(bikeLD);
+        assertNotNull(bikeDD);
+        assertNotNull(localDate);
     }
-    
+
     @Test
+    @DisplayName("Linear Depreciation Case Test")
     void LDCaseTest1() {
-        BikeWithLDValuationPolicy bike = new BikeWithLDValuationPolicy(new BigDecimal(900), 3, 0.1);
-        String date = "2016-08-16";
-        LocalDate localDate = LocalDate.parse(date);
-        assertEquals(new BigDecimal("630.00"), bike.calculateValue(bike, localDate));
+        bikeLD = new BikeWithLDValuationPolicy(new BigDecimal(900), 3, 0.1);
+        stringDate = "2016-08-16";
+        localDate = LocalDate.parse(stringDate);
+        assertEquals(new BigDecimal("630.00"), bikeLD.calculateValue(bikeLD, localDate));
     }
     
     @Test
+    @DisplayName("Double Declining Balance Depreciation Case Test")
     void DDCaseTest1() {
-        BikeWithDDValuationPolicy bike = new BikeWithDDValuationPolicy(new BigDecimal(900), 3, 0.1);
-        String date = "2016-08-16";
-        LocalDate localDate = LocalDate.parse(date);
-        assertEquals(new BigDecimal("460.80"), bike.calculateValue(bike, localDate));
+        bikeDD = new BikeWithDDValuationPolicy(new BigDecimal(900), 3, 0.1);
+        stringDate = "2016-08-16";
+        localDate = LocalDate.parse(stringDate);
+        assertEquals(new BigDecimal("460.80"), bikeDD.calculateValue(bikeDD, localDate));
     }
     
-    // Basic unit tests and standard assertions are grouped together in one method
-    // TODO: Could perhaps divide the methods up
-    @Test
-    void standardAssertions() {
-    	
-    }
+    // TODO: Group Assertions needed for covering a generic scenario?
+
     
-    // Group assertions
-    
-    // TODO: Write tests for valuation policies
 }
