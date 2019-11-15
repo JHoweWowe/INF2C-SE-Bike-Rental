@@ -9,9 +9,9 @@ import org.junit.jupiter.api.*;
 
 public class ValuationPolicyTests {
     
-    //TODO: If bikeLD and bikeDD should be protected or private
-    protected BikeWithLDValuationPolicy bikeLD;
-    protected BikeWithDDValuationPolicy bikeDD;
+    protected LinearDepreciationValuationPolicy ld;
+    protected Bike bike;
+    
     private String stringDate;
     private LocalDate localDate;
     
@@ -26,12 +26,11 @@ public class ValuationPolicyTests {
     
     @BeforeEach
     void setUp() throws Exception {
-        bikeLD = new BikeWithLDValuationPolicy();
-        bikeDD = new BikeWithDDValuationPolicy();
+        bike = new Bike(new BikeType(new BigDecimal(900)),3);
+        ld = new LinearDepreciationValuationPolicy(new BigDecimal(0.1));
         localDate = LocalDate.now();
         
-        assertNotNull(bikeLD);
-        assertNotNull(bikeDD);
+        assertNotNull(ld);
         assertNotNull(localDate);
     }
     
@@ -39,19 +38,15 @@ public class ValuationPolicyTests {
     @Test
     @DisplayName("Linear Depreciation Case Test #1")
     void LDCaseTest1() {
-        bikeLD = new BikeWithLDValuationPolicy(new BigDecimal(900), 3, new BigDecimal(0.1));
         stringDate = "2016-08-16";
         localDate = LocalDate.parse(stringDate);
-        assertEquals(new BigDecimal("630.00"), bikeLD.calculateValue(bikeLD, localDate));
+        assertEquals(new BigDecimal("630.00"), ld.calculateValue(bike, localDate));
     }
     
     @Test
     @DisplayName("Double Declining Balance Depreciation Case Test")
     void DDCaseTest1() {
-        bikeDD = new BikeWithDDValuationPolicy(new BigDecimal(900), 3, new BigDecimal(0.1));
-        stringDate = "2016-08-16";
-        localDate = LocalDate.parse(stringDate);
-        assertEquals(new BigDecimal("460.80"), bikeDD.calculateValue(bikeDD, localDate));
+
     }
     
     /** 
