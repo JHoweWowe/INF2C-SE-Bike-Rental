@@ -4,14 +4,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import org.junit.jupiter.api.*;
 
 public class ValuationPolicyTests {
     
-    protected LinearDepreciationValuationPolicy ld;
-    protected DoubleDepreciationValuationPolicy dd;
-    protected Bike bike;
+    private LinearDepreciationValuationPolicy ld;
+    private DoubleDepreciationValuationPolicy dd;
+    
+    private Provider bikeProvider;
+    private Location location;
+    private LocalTime openingHours;
+    
+    private Bike bike;
+    private BikeType bikeType;
+    private BigDecimal depositRate;
+    private BigDecimal bikePrice;
+    private int bikeAgeInYears;
     
     private String stringDate;
     private LocalDate localDate;
@@ -27,7 +37,17 @@ public class ValuationPolicyTests {
     
     @BeforeEach
     void setUp() throws Exception {
-        bike = new Bike(new BikeType(new BigDecimal(900)),3);
+        openingHours = LocalTime.of(10,30);
+        location = new Location("EH16 5AY", "Chancellors Court");
+        depositRate = new BigDecimal(0.2);
+        
+        bikeType = new BikeType(new BigDecimal(900));
+        bikeAgeInYears = 3;
+        bikePrice = new BigDecimal(200);
+        
+        bikeProvider = new Provider("The Bike Station",location,openingHours,depositRate);
+        bike = new Bike(bikeType,bikeAgeInYears,bikePrice,bikeProvider);
+        
         ld = new LinearDepreciationValuationPolicy(new BigDecimal(0.1));
         dd = new DoubleDepreciationValuationPolicy(new BigDecimal(0.1));
         localDate = LocalDate.now();
