@@ -15,11 +15,15 @@ public class LinearDepreciationValuationPolicy implements ValuationPolicy {
     public BigDecimal getDepreciationRate() {
         return depreciationRate;
     }
-
+    
+    /**
+     * @param date can be any date- including the future?
+     *  
+     */
     @Override
     public BigDecimal calculateValue(Bike bike, LocalDate date) {
         BigDecimal originalReplacementValue = bike.getBikeType().getOriginalReplacementValue();
-        int years = LocalDate.now().getYear() - date.getYear();
+        int years = Math.abs(LocalDate.now().getYear() - date.getYear());
         
         BigDecimal difference = originalReplacementValue.multiply(new BigDecimal(years)).multiply(getDepreciationRate());
         BigDecimal newValue = originalReplacementValue.subtract(difference);

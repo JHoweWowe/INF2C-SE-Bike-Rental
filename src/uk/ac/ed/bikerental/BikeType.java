@@ -15,9 +15,8 @@ public class BikeType {
         return originalReplacementValue;
     }
     
+    //TODO: To be updated
     public BigDecimal getReplacementValue() {
-        // TODO: Implement Bike.getReplacementValue
-        assert false;
-        return null;
+        return originalReplacementValue;
     }
 }
