@@ -19,12 +19,12 @@ public class LinearDepreciationValuationPolicy implements ValuationPolicy {
     @Override
     public BigDecimal calculateValue(Bike bike, LocalDate date) {
         BigDecimal originalReplacementValue = bike.getBikeType().getOriginalReplacementValue();
-        //int years = LocalDate.now().getYear() - date.getYear();
-        int years = 3;
+        int years = LocalDate.now().getYear() - date.getYear();
         
         BigDecimal difference = originalReplacementValue.multiply(new BigDecimal(years)).multiply(getDepreciationRate());
         BigDecimal newValue = originalReplacementValue.subtract(difference);
         
+        //Rounds the calculated new value to be rounded up/down to nearest whole number within 2 decimal places
         newValue = newValue.setScale(2, RoundingMode.HALF_EVEN).abs();
         
         return newValue;

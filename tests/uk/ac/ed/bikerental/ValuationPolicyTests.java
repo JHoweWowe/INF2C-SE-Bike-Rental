@@ -10,6 +10,7 @@ import org.junit.jupiter.api.*;
 public class ValuationPolicyTests {
     
     protected LinearDepreciationValuationPolicy ld;
+    protected DoubleDepreciationValuationPolicy dd;
     protected Bike bike;
     
     private String stringDate;
@@ -28,9 +29,11 @@ public class ValuationPolicyTests {
     void setUp() throws Exception {
         bike = new Bike(new BikeType(new BigDecimal(900)),3);
         ld = new LinearDepreciationValuationPolicy(new BigDecimal(0.1));
+        dd = new DoubleDepreciationValuationPolicy(new BigDecimal(0.1));
         localDate = LocalDate.now();
         
         assertNotNull(ld);
+        assertNotNull(dd);
         assertNotNull(localDate);
     }
     
@@ -46,7 +49,10 @@ public class ValuationPolicyTests {
     @Test
     @DisplayName("Double Declining Balance Depreciation Case Test")
     void DDCaseTest1() {
-
+        stringDate = "2016-08-16";
+        localDate = LocalDate.parse(stringDate);
+        assertEquals(new BigDecimal("460.80"), dd.calculateValue(bike, localDate));
+        
     }
     
     /** 
