@@ -5,16 +5,32 @@ import java.util.Collection;
 
 public class Quote {
     
-    protected Provider provider;
-    protected Collection<Bike> bikes;
-    protected BigDecimal totalDepositAmount;
-    protected BigDecimal totalPrice;
+    private Provider provider;
+    private Collection<Bike> bikes;
+    private BigDecimal totalDepositAmount;
+    private BigDecimal totalPrice;
     
     public Quote(Provider provider, Collection<Bike> bikes, BigDecimal totalPrice, BigDecimal totalDepositAmount) {
         this.provider = provider;
         this.bikes = bikes;
         this.totalDepositAmount = totalDepositAmount;
         this.totalPrice = totalPrice;
+    }
+    
+    public Provider getProvider() {
+        return provider;
+    }
+    
+    public Collection<Bike> getCollectionOfBikes() {
+        return bikes;
+    }
+    
+    public BigDecimal getTotalDepositAmount() {
+        return totalDepositAmount;
+    }
+    
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
     }
     
     //Given a Collection of Bikes, this method calculates the total price in the quote

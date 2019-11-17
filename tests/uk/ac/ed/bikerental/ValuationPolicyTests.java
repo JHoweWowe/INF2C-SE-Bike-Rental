@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.*;
 
@@ -22,6 +24,7 @@ public class ValuationPolicyTests {
     private BigDecimal depositRate;
     private BigDecimal bikePrice;
     private int bikeAgeInYears;
+    private List<DateRange> dates;
     
     private String stringDate;
     private LocalDate localDate;
@@ -44,9 +47,11 @@ public class ValuationPolicyTests {
         bikeType = new BikeType(new BigDecimal(900));
         bikeAgeInYears = 3;
         bikePrice = new BigDecimal(200);
+        dates = new ArrayList<DateRange>();
+        dates.add(new DateRange(LocalDate.of(2019, 10, 15),LocalDate.of(2019, 11, 15)));
         
         bikeProvider = new Provider("The Bike Station",location,openingHours,depositRate);
-        bike = new Bike(bikeType,bikeAgeInYears,bikePrice,bikeProvider);
+        bike = new Bike(bikeType,bikeAgeInYears,bikePrice,bikeProvider,dates);
         
         ld = new LinearDepreciationValuationPolicy(new BigDecimal(0.1));
         dd = new DoubleDepreciationValuationPolicy(new BigDecimal(0.1));
