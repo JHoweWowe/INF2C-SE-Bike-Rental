@@ -1,5 +1,6 @@
 package uk.ac.ed.bikerental;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,47 +11,46 @@ import java.util.List;
 
 public class MainSystem {
     
-    private List<Quote> quotes;
-    private Booking booking;
-    
-    //This method filters the quotes whose Providers are not near the given location
-    public static List<Quote> filterProvider(List<Quote> quotes, Location givenLocation) {
+    /**
+     * This method filters the quotes whose Providers are not near the given location
+     * This approach is to avoid ConcurrentModification error
+     */
+    public static List<Quote> filterByProvider(List<Quote> quotes, Location givenLocation) {
+        List<Quote> quotesToRemove = new ArrayList<>();
         for (Quote q : quotes) {
             Location providerLocation = q.getProvider().getLocation();
             if (!(providerLocation.isNearTo(givenLocation))) {
-                quotes.remove(q);
+                quotesToRemove.add(q);
             }
         }
+        quotes.removeAll(quotesToRemove);
         return quotes;
     }
-
-    public List<Quote> filterByDate(List<Quote> listOfQuotes, DateRange requestedDates){
-        for (Quote q : listOfQuotes){
-            if (search(q,requestedDates)){
-                listOfQuotes.remove(q);
+    
+    /**
+     * This method filters the quotes whose Dates are not in the given Dates
+     * This approach is to avoid ConcurrentModification error
+     */
+    public static List<Quote> filterByDate(List<Quote> listOfQuotes, DateRange requestedDates) {
+        List<Quote> quotesToRemove = new ArrayList<>();
+        for (Quote q : listOfQuotes) {
+            if (search(q,requestedDates)) {
+                quotesToRemove.add(q);
             }
         }
+        listOfQuotes.removeAll(quotesToRemove);
         return listOfQuotes;
     }
-
-    public boolean search(Quote q, DateRange requestedDates){
-        for (Bike b : q.getCollectionOfBikes()){
-            for (DateRange range : b.getBookedDates()){
-                if (range.overlaps(requestedDates)){
+    
+    //Helper function to search through whether the bike has been booked for the requested dates
+    public static boolean search(Quote q, DateRange requestedDates) {
+        for (Bike b : q.getCollectionOfBikes()) {
+            for (DateRange range : b.getBookedDates()) {
+                if (range.overlaps(requestedDates)) {
                     return true;
                 }
             }
         }
         return false;
-    }
-    
-    //There should be another method to filterDate
-    public static List<Quote> filterDate(List<Quote> quotes, DateRange dates) {
-        return null;
-    }
-    
-    //Shows the final result
-    public List<Quote> showsFilteredList() {
-        return null;
     }
 }
