@@ -5,14 +5,20 @@ import java.util.Objects;
 
 public class BikeType {
     
+    private String bikeTypeName;
     private BigDecimal originalReplacementValue;
     
-    public BikeType(BigDecimal originalReplacementValue) {
+    public BikeType(String bikeTypeName, BigDecimal originalReplacementValue) {
+        this.bikeTypeName = bikeTypeName;
         this.originalReplacementValue = originalReplacementValue;
     }
     
     public BigDecimal getOriginalReplacementValue() {
         return originalReplacementValue;
+    }
+    
+    public String getBikeTypeName() {
+        return bikeTypeName;
     }
     
     //TODO: To be updated

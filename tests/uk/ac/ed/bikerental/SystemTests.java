@@ -41,8 +41,8 @@ public class SystemTests {
         bikesCollection1 = new ArrayList<Bike>();
         bikesCollection2 = new ArrayList<Bike>();
         givenLocation = new Location("EH16 5AJ", "293 Dalkeith Road");
-        bikeType1 = new BikeType(new BigDecimal(600));
-        bikeType2 = new BikeType(new BigDecimal(900));
+        bikeType1 = new BikeType("Trek",new BigDecimal(600));
+        bikeType2 = new BikeType("Gocycle",new BigDecimal(900));
 
         
         //Constructing the dates for testing purposes
@@ -85,7 +85,8 @@ public class SystemTests {
         // Put your test setup here
     }
     
-    //Unit tests are established in the first use case:
+    //System tests are established
+    //TODO: Will need to implement more usability tests soon and define them under System testing
     @Test
     void filterByProvider() {
         assertNotNull(quote1);

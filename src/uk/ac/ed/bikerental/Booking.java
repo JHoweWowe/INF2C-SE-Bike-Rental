@@ -3,13 +3,15 @@ package uk.ac.ed.bikerental;
 public class Booking {
     
     //DateRange should be the Booking date range given
-    protected DateRange bookingDates;
-    protected Quote quote;
+    private DateRange bookingDates;
+    private Quote quote;
+    private int bookingNumber;
     
     
-    public Booking(DateRange bookingDates, Quote quote) {
+    public Booking(DateRange bookingDates, Quote quote, int bookingNumber) {
         this.bookingDates = bookingDates;
         this.quote = quote;
+        this.bookingNumber = bookingNumber;
     }
 
     

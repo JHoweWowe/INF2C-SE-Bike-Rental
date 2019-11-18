@@ -3,7 +3,8 @@ package uk.ac.ed.bikerental;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class Bike {
+//Note: A Bike is a Deliverable
+public class Bike implements Deliverable {
     
     private BikeType bikeType;
     private int bikeAgeInYears;
@@ -42,6 +43,16 @@ public class Bike {
     
     public void addToBookedDates(DateRange dates) {
         bookedDates.add(dates);
+    }
+    
+    //Used for the 3rd use case scenario:
+    @Override
+    public void onPickup() {
+        // TODO Auto-generated method stub
+    }
+    @Override
+    public void onDropoff() {
+        // TODO Auto-generated method stub
     }
 
 }

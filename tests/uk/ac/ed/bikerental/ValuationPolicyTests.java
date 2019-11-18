@@ -44,7 +44,7 @@ public class ValuationPolicyTests {
         location = new Location("EH16 5AY", "Chancellors Court");
         depositRate = new BigDecimal(0.2);
         
-        bikeType = new BikeType(new BigDecimal(900));
+        bikeType = new BikeType("Trek",new BigDecimal(900));
         bikeAgeInYears = 3;
         bikePrice = new BigDecimal(200);
         dates = new ArrayList<DateRange>();

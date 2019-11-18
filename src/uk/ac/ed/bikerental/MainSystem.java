@@ -2,10 +2,11 @@ package uk.ac.ed.bikerental;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class acts as the Main class- all methods should be static
- * Currently implementing the first use case scenario
+ * Currently implementing the first and second use case scenario
  *
  */
 
@@ -53,4 +54,10 @@ public class MainSystem {
         }
         return false;
     }
+    
+    //Necessary??? If so use HashMap equals method
+    public static List<Quote> filterByNumType(Map<Integer,BikeType> map) {
+        return null;
+    }
+    
 }
