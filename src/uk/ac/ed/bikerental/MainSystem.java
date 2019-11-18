@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class acts as the Main class
+ * This class acts as the Main class- all methods should be static
  * Currently implementing the first use case scenario
  *
  */
