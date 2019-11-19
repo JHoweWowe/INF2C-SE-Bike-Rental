@@ -21,8 +21,8 @@ public class Customer {
     
     //This method is used for the first use case scenario
     //To check: Unsure if this approach is correct
-    public List<Quote> findQuote(List<Quote> quotes, Location givenLocation, DateRange requestedDates) {
-        return MainSystem.filterByDate(MainSystem.filterByProvider(quotes, givenLocation), requestedDates);
+    public List<Quote> findQuote(List<Quote> quotes, RequestedData requestedData) {
+        return MainSystem.filterByDate(MainSystem.filterByProvider(quotes, requestedData.getRequestedLocation()), requestedData.getRequestedDates());
     }
     
     //This method is used for the second use case scenario
