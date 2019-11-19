@@ -59,5 +59,6 @@ public class MainSystem {
     public static List<Quote> filterByNumType(Map<Integer,BikeType> map) {
         return null;
     }
+
     
 }

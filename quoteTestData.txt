@@ -1,5 +1,0 @@
-The Bike Station#<Trek>#120.00 GBP#15.00 GBP
-The Tartan Bicycle Company#<Trek,Giant>#180.00 GBP#20.00 GBP
-The Bike Shop Scotland#<Jamis,Trek>#100.00 GBP#18.00 GBP
-Pedal Power#<Pinaerllo,Gocycle>#200.00 GBP#25.00 GBP
-Highland Bikes#<Whyte,Trek>#175.00 GBP#22.00 GBP
