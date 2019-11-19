@@ -1,0 +1,4 @@
+TONIGHT CW3:
+filterByNumTypes<> - Rohan
+Update SystemTests.java - Justin
+Start designing and implementing Booking class - Justin
