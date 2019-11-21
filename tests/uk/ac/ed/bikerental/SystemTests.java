@@ -123,8 +123,8 @@ public class SystemTests {
         bikeCollection3.add(new Bike(bike3Type,3,new BigDecimal(600),bikeProvider1,bikeCollection3BookedDates));
         
         //Assume each Collection of Bikes has the same bike provider
-        bikesCollection2.add(new Bike(bikeType2,3,new BigDecimal(600),bikeProvider2,bikeCollection3BookedDates));
-        bikesCollection2.add(new Bike(bikeType2,3,new BigDecimal(900),bikeProvider2,bikeCollection3BookedDates));
+        bikesCollection2.add(new Bike(bikeType2,3,new BigDecimal(600),bikeProvider2,bikeCollection2BookedDates));
+        bikesCollection2.add(new Bike(bikeType2,3,new BigDecimal(900),bikeProvider2,bikeCollection2BookedDates));
         
         
 

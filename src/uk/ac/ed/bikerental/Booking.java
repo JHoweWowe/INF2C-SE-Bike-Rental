@@ -13,13 +13,26 @@ public class Booking {
         this.quote = quote;
         this.bookingNumber = bookingNumber;
     }
-
+    
+    public DateRange getBookingDates() {
+        return bookingDates;
+    }
+    
+    public Quote getQuote() {
+        return quote;
+    }
+    
+    public int getBookingNumber() {
+        return bookingNumber;
+    }
+    
+    //This should be called after the booking has been done- the booking number should be incremented by 1
+    public void incrementBookingNumber() {
+        bookingNumber++;
+    }
     
     //Searches through all bikes in the Quote and adds the dateRange as booked
-    public void addBooking(Quote q) {
-        for (Bike b : q.getCollectionOfBikes()) {
-            b.addToBookedDates(bookingDates);
-        }
-    }
+    //Used for use-case 1
+
 
 }

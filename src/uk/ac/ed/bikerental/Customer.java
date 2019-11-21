@@ -26,14 +26,23 @@ public class Customer {
     }
     
     //This method is used for the second use case scenario
-    public Booking bookQuote(Quote quote) {
-        if (requestDelivery) {
-            //Set up the DeliveryService- assume it has been done
-            DeliveryServiceFactory.getDeliveryService();
-            //Return a booking
+    public Booking bookQuote(Quote quote, DateRange dates) {
+        Booking bookingObject = new Booking(dates,quote,booking.getBookingNumber());
+        
+        //For each bike in the quote, the bike booking dates must be added
+        for (Bike b : quote.getCollectionOfBikes()) {
+            b.addToBookedDates(dates);
         }
-        //Else return just a booking
-        return null;
+        
+        if (requestDelivery) {
+            //Set up the DeliveryService- assume it has been done according to the system description
+            DeliveryServiceFactory.getDeliveryService();
+            //Booking object should be updated by 1
+            bookingObject.incrementBookingNumber();
+            return bookingObject;
+        }
+        //Else only return just a booking without the delivery
+        return bookingObject;
     }
 
 }
