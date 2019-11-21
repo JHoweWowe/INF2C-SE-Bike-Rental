@@ -16,3 +16,7 @@ Start designing and implementing Booking class - Justin
 - VERY IMPORTANT
 
 Redo design of UML Class Diagram - Justin
+
+LESS IMPORTANT BUT CRUICIAL FOR OUR MARKS (DO WITHIN LAST 2-3 DAYS):
+- JavaDoc
+- 
