@@ -44,8 +44,8 @@ public class MainSystem {
     }
     
     //Helper function to search through whether the bike has been booked for the requested dates
-    public static boolean search(Quote q, DateRange requestedDates) {
-        for (Bike b : q.getCollectionOfBikes()) {
+    public static boolean search(Quote quote, DateRange requestedDates) {
+        for (Bike b : quote.getCollectionOfBikes()) {
             for (DateRange range : b.getBookedDates()) {
                 if (range.overlaps(requestedDates)) {
                     return true;

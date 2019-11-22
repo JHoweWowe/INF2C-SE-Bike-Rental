@@ -30,9 +30,6 @@ public class Booking {
     public void incrementBookingNumber() {
         bookingNumber++;
     }
-    
-    //Searches through all bikes in the Quote and adds the dateRange as booked
-    //Used for use-case 1
 
 
 }
