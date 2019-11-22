@@ -1,6 +1,6 @@
 # INF2C-SE-Coursework3
 
-TONIGHT 21/11/2019 CW3:
+TONIGHT 22/11/2019 CW3:
 
 filterByNumTypes<> - Rohan
 - Usage of Collections.frequency
@@ -19,4 +19,5 @@ Redo design of UML Class Diagram - Justin
 
 LESS IMPORTANT BUT CRUICIAL FOR OUR MARKS (DO WITHIN LAST 2-3 DAYS):
 - JavaDoc
-- 
+- Reupdate CW2 marks
+
