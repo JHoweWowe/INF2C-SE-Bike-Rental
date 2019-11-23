@@ -42,11 +42,29 @@ public class Provider {
         depositRate = newDepositRate;
     }
     
+    //Assume the Provider wants to handle return of the bikes- setting if bike is available for rent
+    public void setNotAvailableForRent(Bike bike) {
+        bike.isBooked = false;
+    }
     
+    public void setAvailableForRent(Bike bike) {
+        bike.isBooked = true;
+    }
     
+    public boolean sameProviderLocation(Provider otherProvider) {
+        String providerAddress = this.getLocation().getAddress();
+        String otherProviderAddress = this.getLocation().getAddress();
+        String providerPostcode = this.getLocation().getPostcode();
+        String otherProviderPostcode = this.getLocation().getPostcode();
+        return providerAddress.equals(otherProviderAddress) && providerPostcode.equals(otherProviderPostcode);
+    }
     
-    
-    
-    
+    //This implements the third use case as required in the system description
+    public void returnBikes(Provider otherProvider) {
+        if (!(sameProviderLocation(otherProvider))) {
+            DeliveryServiceFactory.getDeliveryService();
+        }
+    }
+
 
 }

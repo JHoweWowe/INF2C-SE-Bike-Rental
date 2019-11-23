@@ -30,8 +30,9 @@ public class Customer {
         Booking bookingObject = new Booking(dates,quote,booking.getBookingNumber());
         
         //For each bike in the quote, the bike booking dates must be added
-        for (Bike b : quote.getCollectionOfBikes()) {
-            b.addToBookedDates(dates);
+        for (Bike bike : quote.getCollectionOfBikes()) {
+            bike.addToBookedDates(dates);
+            quote.getProvider().setNotAvailableForRent(bike);
         }
         
         if (requestDelivery) {
