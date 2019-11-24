@@ -56,10 +56,10 @@ public class MainSystem {
     }
 
     //Necessary??? If so use HashMap equals method
-    public static List<Quote> filterByNumType(List<Quote> listOfQuotes, Map<Integer,BikeType> map) {
-      List<Quote> quotesToKeep = new ArrayList<>();
+    public static List<Quote> filterByNumType(List<Quote> listOfQuotes, Map<BikeType,Integer> map) {
+      List<Quote> quotesToKeep = new ArrayList<Quote>();
         for (Quote q : listOfQuotes){
-          Map<Integer,BikeType> quoteMap = q.getMapOfBikes();
+          Map<BikeType,Integer> quoteMap = q.getMapOfBikes();
           if (quoteMap.equals(map)){
             quotesToKeep.add(q);
           }
