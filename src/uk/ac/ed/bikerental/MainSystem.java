@@ -1,6 +1,9 @@
 package uk.ac.ed.bikerental;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +14,7 @@ import java.util.Map;
  */
 
 public class MainSystem {
-    
+        
     /**
      * This method filters the quotes whose Providers are not near the given location
      * This approach is to avoid ConcurrentModification error
@@ -55,9 +58,45 @@ public class MainSystem {
         return false;
     }
     
-    //Necessary??? If so use HashMap equals method
-    public static List<Quote> filterByNumType(Map<Integer,BikeType> map) {
-        return null;
+    /**
+     * This method filters the quotes where the number of BikeTypes requested is not equal to the customer's desire
+     * Instead of removing quotes that don't match, we add quotes which matches the map
+     */
+    public static List<Quote> filterByNumType(List<Quote> listOfQuotes, Map<BikeType,Integer> map) {
+        List<Quote> quotesToKeep = new ArrayList<Quote>();
+        for (Quote q : listOfQuotes) {
+            Map<BikeType,Integer> quoteMap = q.getMapOfBikes();
+            if (quoteMap.equals(map)) {
+              quotesToKeep.add(q);
+            }
+              /*List<BikeType> quoteBikes = new ArrayList<BikeType>();
+              for (Bike b : q.getCollectionOfBikes()){
+                quoteBikes.add(b.getBikeType());
+              }
+              // Now compare whether quote bike types match requested bike types
+              // Convert the Map to a List
+              List<BikeType> requestedBikes = new ArrayList<BikeType>();
+              */
+        }
+        return quotesToKeep;
+      }
+    
+    //Tester function
+    public static List<Quote> filterByNumType2(List<Quote> listOfQuotes, Map<BikeType,Integer> map) {
+        List<Quote> quotesToKeep = new ArrayList<Quote>();
+        Map<BikeType,Integer> bikeTypeMap = new HashMap<BikeType,Integer>();
+        for (Quote q : listOfQuotes) {
+            for (Bike bike : q.getCollectionOfBikes()) {
+                if (!bikeTypeMap.containsKey(bike.getBikeType())) { 
+                    bikeTypeMap.put(bike.getBikeType(),0);
+                }
+                bikeTypeMap.replace(bike.getBikeType(), bikeTypeMap.get(bike.getBikeType()) + 1);
+            }
+            if (bikeTypeMap.equals(map)) {
+                quotesToKeep.add(q);
+            }
+        }
+        return quotesToKeep;
     }
 
     

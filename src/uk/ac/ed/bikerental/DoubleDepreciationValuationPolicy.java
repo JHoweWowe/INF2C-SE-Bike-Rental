@@ -16,7 +16,6 @@ public class DoubleDepreciationValuationPolicy implements ValuationPolicy {
         return depreciationRate;
     }
     
-    //TODO: Refactor the variables in the calculateValue() method
     @Override
     public BigDecimal calculateValue(Bike bike, LocalDate date) throws IllegalArgumentException {
         if (depreciationRate.doubleValue() < 0 || depreciationRate.doubleValue() > 1) {
@@ -25,11 +24,8 @@ public class DoubleDepreciationValuationPolicy implements ValuationPolicy {
         BigDecimal originalReplacementValue = bike.getBikeType().getOriginalReplacementValue();
         int yearsDifference = Math.abs(LocalDate.now().getYear()-date.getYear());
         
-        BigDecimal factor = new BigDecimal(yearsDifference-1).multiply(depreciationRate);
-        BigDecimal factorE = new BigDecimal(1).subtract(factor);
-        BigDecimal factorExp = factorE.pow(yearsDifference);
-        System.out.println(factorExp);
-        
+        BigDecimal factor = new BigDecimal(1.0).subtract(new BigDecimal(2.0).multiply(depreciationRate));
+        BigDecimal factorExp = factor.pow(yearsDifference);
         BigDecimal newValue = originalReplacementValue.multiply(factorExp);
         //Rounds the calculated new value to be rounded up/down to nearest whole number within 2 decimal places
         newValue = newValue.setScale(2, RoundingMode.HALF_EVEN);
@@ -37,7 +33,6 @@ public class DoubleDepreciationValuationPolicy implements ValuationPolicy {
         if (newValue.doubleValue() < 0) {
             throw new IllegalArgumentException("The value of the bike cannot be negative");
         }
-
         
         return newValue;
     }

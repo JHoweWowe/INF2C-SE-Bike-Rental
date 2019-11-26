@@ -12,6 +12,7 @@ import org.junit.jupiter.api.*;
 
 public class ValuationPolicyTests {
     
+    private ValuationPolicy valuationPolicy;
     private LinearDepreciationValuationPolicy ld;
     private DoubleDepreciationValuationPolicy dd;
     
@@ -49,7 +50,7 @@ public class ValuationPolicyTests {
         dates = new ArrayList<DateRange>();
         dates.add(new DateRange(LocalDate.of(2019, 10, 15),LocalDate.of(2019, 11, 15)));
         
-        bikeProvider = new Provider("The Bike Station",location,openingHours,depositRate);
+        bikeProvider = new Provider("The Bike Station",location,openingHours,depositRate,valuationPolicy);
         bike = new Bike(bikeType,bikeAgeInYears,bikePrice,bikeProvider,dates);
         
         dd = new DoubleDepreciationValuationPolicy(new BigDecimal(0.1));
@@ -60,12 +61,13 @@ public class ValuationPolicyTests {
         assertNotNull(localDate);
     }
     
-    //TODO: Further testing can be implemented where the value may result in a negative value to throw Exception
     @Test
     @DisplayName("Linear Depreciation Case Test #1")
     void LDCaseTest1() {
         BigDecimal depreciationRate = new BigDecimal(0.1);
         ld = new LinearDepreciationValuationPolicy(depreciationRate);
+        bike = new Bike(bikeType,bikeAgeInYears,bikePrice,bikeProvider,dates);
+
         assertNotNull(ld);
         
         stringDate = "2016-08-16";
@@ -120,21 +122,6 @@ public class ValuationPolicyTests {
         stringDate = "2016-08-16";
         localDate = LocalDate.parse(stringDate);
         assertEquals(new BigDecimal("460.80").stripTrailingZeros(), dd.calculateValue(bike, localDate).stripTrailingZeros());
-    }
-    
-    @Test
-    @DisplayName("The value of the bike with the double declining balance depreciation rate cannot be negative")
-    void invalidDDcalculatedValue() {
-        BigDecimal depreciationRate = new BigDecimal(1);
-        dd = new DoubleDepreciationValuationPolicy(depreciationRate);
-        assertNotNull(dd);
-        
-        stringDate = "1918-08-16";
-        localDate = LocalDate.parse(stringDate);
-        bike = new Bike(bikeType,101,bikePrice,bikeProvider,dates);
-        assertThrows(IllegalArgumentException.class, () -> {
-            dd.calculateValue(bike, localDate);
-        });
     }
 
 }

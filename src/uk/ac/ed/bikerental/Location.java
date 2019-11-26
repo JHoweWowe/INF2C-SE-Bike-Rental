@@ -7,14 +7,15 @@ public class Location {
     private String address;
     
     public Location(String postcode, String address) {
-        assert postcode.length() >= 6;
         this.postcode = postcode;
         this.address = address;
     }
     
-    public boolean isNearTo(Location other) {
-        //Will throw AssertionError if the both Location postcodes are smaller than 2
-        assert getPostcode().length() > 2 && other.getPostcode().length() > 2;
+    public boolean isNearTo(Location other) throws IllegalArgumentException {
+        //Will throw AssertionError if the both Location postcodes are smaller than 6
+        if (this.getPostcode().length() < 6 || other.getPostcode().length() < 6) {
+            throw new IllegalArgumentException("Postcode length cannot be less than 6");
+        }
         if (getPostcode().substring(0,2).equals(other.getPostcode().substring(0,2))) {
             return true;
         }
@@ -27,6 +28,11 @@ public class Location {
 
     public String getAddress() {
         return address;
+    }
+    
+    //Implemented for DeliveryService
+    public boolean equals(Location otherLocation) {
+        return (getAddress().equals(otherLocation.getAddress()) && getPostcode().equals(otherLocation.getPostcode()));
     }
     
     // You can add your own methods here

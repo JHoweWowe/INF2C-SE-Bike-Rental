@@ -14,15 +14,22 @@ public class Customer {
     private Booking booking;
     private boolean requestDelivery;
     
+    //Empty constructor for Customer- assuming the Customer has not made a booking yet
+    //before finding quotes
+    //Mainly used for testing purposes
+    public Customer() {
+        
+    }
+    
     public Customer(Booking booking, boolean requestDelivery) {
         this.booking = booking;
         this.requestDelivery = requestDelivery;
     }
     
     //This method is used for the first use case scenario
-    //To check: Unsure if this approach is correct
     public List<Quote> findQuote(List<Quote> allQuotes, RequestedData requestedData) {
-        return MainSystem.filterByDate(MainSystem.filterByProvider(allQuotes, requestedData.getRequestedLocation()), requestedData.getRequestedDates());
+        return MainSystem.filterByDate(MainSystem.filterByProvider(allQuotes, 
+                requestedData.getRequestedLocation()), requestedData.getRequestedDates());
     }
     
     //This method is used for the second use case scenario
@@ -35,9 +42,12 @@ public class Customer {
             quote.getProvider().setNotAvailableForRent(bike);
         }
         
+        //Assume the dropoff location is the same as the pickup location
         if (requestDelivery) {
-            //Set up the DeliveryService- assume it has been done according to the system description
-            DeliveryServiceFactory.getDeliveryService();
+            for (Bike bike : quote.getCollectionOfBikes()) {
+                DeliveryServiceFactory.getDeliveryService()
+                .scheduleDelivery(bike, quote.getProvider().getLocation(), quote.getProvider().getLocation(), dates.getStart());
+            }
             //Booking object should be updated by 1
             bookingObject.incrementBookingNumber();
             return bookingObject;

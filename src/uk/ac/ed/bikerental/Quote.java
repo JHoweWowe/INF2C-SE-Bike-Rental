@@ -1,7 +1,12 @@
 package uk.ac.ed.bikerental;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Quote {
     
@@ -9,8 +14,10 @@ public class Quote {
     private Collection<Bike> bikes;
     private BigDecimal totalDepositAmount;
     private BigDecimal totalPrice;
+
     
-    public Quote(Provider provider, Collection<Bike> bikes, BigDecimal totalPrice, BigDecimal totalDepositAmount) {
+    public Quote(Provider provider, Collection<Bike> bikes, 
+           BigDecimal totalPrice, BigDecimal totalDepositAmount) {
         this.provider = provider;
         this.bikes = bikes;
         this.totalDepositAmount = totalDepositAmount;
@@ -33,6 +40,20 @@ public class Quote {
         return totalPrice;
     }
     
+    //Helper function for the MainSystem to obtain the Map of BikeTypes
+    public Map<BikeType,Integer> getMapOfBikes() {
+        Map<BikeType,Integer> mapOfBikes = new HashMap<BikeType,Integer>();
+        List<BikeType> bts = new ArrayList<BikeType>();
+        for (Bike b : bikes) {
+          bts.add(b.getBikeType());
+        }
+        for (BikeType bt : bts) {
+          int num = Collections.frequency(bts,bt);
+          mapOfBikes.put(bt,num);
+        }
+        return mapOfBikes;
+    }
+
     //Given a Collection of Bikes, this method calculates the total price in the quote
     public BigDecimal calculateTotalPrice(Collection<Bike> bikes) {
         totalPrice = new BigDecimal(0);
@@ -46,7 +67,6 @@ public class Quote {
         totalDepositAmount = new BigDecimal(0);
         totalDepositAmount = provider.getDepositRate().multiply(calculateTotalPrice(bikes));
         return totalDepositAmount;
-        
     }
 
 }
