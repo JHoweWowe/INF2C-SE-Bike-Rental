@@ -51,6 +51,11 @@ public class Quote {
           int num = Collections.frequency(bts,bt);
           mapOfBikes.put(bt,num);
         }
+        /**for (Map.Entry<BikeType,Integer> entry : mapOfBikes.entrySet()) {
+            BikeType bt = entry.getKey();
+            Integer value = entry.getValue();
+            System.out.println("BikeType is " + bt.getBikeTypeName() + " and value is " + value);
+        }**/
         return mapOfBikes;
     }
 

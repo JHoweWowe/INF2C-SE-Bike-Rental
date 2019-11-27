@@ -74,6 +74,10 @@ public class Provider {
         if (!(sameProviderLocation(otherProvider))) {
             DeliveryServiceFactory.getDeliveryService();
         }
+        //To be implemented
+        else {
+            
+        }
     }
 
 
