@@ -1,3 +1,5 @@
+package uk.ac.ed.bikerental;
+
 public class DefaultPricingPolicy extends PricingPolicy{
 
 	public void setDailyRentalPrice(BikeType bikeType, BigDecimal dailyPrice){
