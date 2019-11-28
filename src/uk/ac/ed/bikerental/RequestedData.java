@@ -1,15 +1,16 @@
 package uk.ac.ed.bikerental;
 import java.util.*;
 
-//Should the methods be static? A RequestedData shouldn't be created as an object?? 
 public class RequestedData {
 
     private Location requestedLocation;
     private DateRange requestedDates;
+    private Map<BikeType, Integer> requestedMapOfBikes;
 
-    public RequestedData(Location requestedLocation, DateRange requestedDates){
+    public RequestedData(Location requestedLocation, DateRange requestedDates, Map<BikeType, Integer> requestedMapOfBikes){
         this.requestedLocation = requestedLocation;
         this.requestedDates = requestedDates;
+        this.requestedMapOfBikes = requestedMapOfBikes;
     }
 
     public Location getRequestedLocation(){
@@ -18,5 +19,9 @@ public class RequestedData {
 
     public DateRange getRequestedDates(){
         return requestedDates;
+    }
+    
+    public Map<BikeType, Integer> getRequestedMapOfBikes() {
+        return requestedMapOfBikes;
     }
 }

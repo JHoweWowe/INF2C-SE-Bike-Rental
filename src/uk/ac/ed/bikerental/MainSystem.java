@@ -1,8 +1,6 @@
 package uk.ac.ed.bikerental;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +62,7 @@ public class MainSystem {
      */
     public static List<Quote> filterByNumType(List<Quote> listOfQuotes, Map<BikeType,Integer> map) {
         List<Quote> quotesToKeep = new ArrayList<Quote>();
-        for (Quote q : listOfQuotes) {
+        for (Quote q : listOfQuotes) {            
             Map<BikeType,Integer> quoteMap = q.getMapOfBikes();
             if (quoteMap.equals(map)) {
               quotesToKeep.add(q);

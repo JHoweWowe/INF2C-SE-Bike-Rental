@@ -28,8 +28,8 @@ public class Customer {
     
     //This method is used for the first use case scenario
     public List<Quote> findQuote(List<Quote> allQuotes, RequestedData requestedData) {
-        return MainSystem.filterByDate(MainSystem.filterByProvider(allQuotes, 
-                requestedData.getRequestedLocation()), requestedData.getRequestedDates());
+        return MainSystem.filterByNumType(MainSystem.filterByDate(MainSystem.filterByProvider(allQuotes, 
+        requestedData.getRequestedLocation()), requestedData.getRequestedDates()), requestedData.getRequestedMapOfBikes());
     }
     
     //This method is used for the second use case scenario
