@@ -43,15 +43,16 @@ public class ValuationPolicyTests {
         location = new Location("EH16 5AY", "Chancellors Court");
         depositRate = new BigDecimal(0.2);
         
-        bikeType = new BikeType("Trek",new BigDecimal(900));
+        //BikeType name is Trek, has an original replacement value of 900 and price of 200
+        bikeType = new BikeType("Trek",new BigDecimal(900),new BigDecimal(200));
         localDate = LocalDate.now();
         bikeAgeInYears = 3;
-        bikePrice = new BigDecimal(200);
         dates = new ArrayList<DateRange>();
         dates.add(new DateRange(LocalDate.of(2019, 10, 15),LocalDate.of(2019, 11, 15)));
         
-        bikeProvider = new Provider("The Bike Station",location,openingHours,depositRate,valuationPolicy);
-        bike = new Bike(bikeType,bikeAgeInYears,bikePrice,bikeProvider,dates);
+        //Considering in this scenario, the bikeProvider has a null pricing policy
+        bikeProvider = new Provider("The Bike Station",location,openingHours,depositRate,valuationPolicy,null);
+        bike = new Bike(bikeType,bikeAgeInYears,bikeProvider,dates);
         
         dd = new DoubleDepreciationValuationPolicy(new BigDecimal(0.1));
 
@@ -66,7 +67,7 @@ public class ValuationPolicyTests {
     void LDCaseTest1() {
         BigDecimal depreciationRate = new BigDecimal(0.1);
         ld = new LinearDepreciationValuationPolicy(depreciationRate);
-        bike = new Bike(bikeType,bikeAgeInYears,bikePrice,bikeProvider,dates);
+        bike = new Bike(bikeType,bikeAgeInYears,bikeProvider,dates);
 
         assertNotNull(ld);
         
@@ -98,7 +99,7 @@ public class ValuationPolicyTests {
         
         stringDate = "1999-08-16";
         localDate = LocalDate.parse(stringDate);
-        bike = new Bike(bikeType,20,bikePrice,bikeProvider,dates);
+        bike = new Bike(bikeType,20,bikeProvider,dates);
         assertThrows(IllegalArgumentException.class, () -> {
             ld.calculateValue(bike, localDate);
         });

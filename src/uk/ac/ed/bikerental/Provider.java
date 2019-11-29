@@ -1,6 +1,7 @@
 package uk.ac.ed.bikerental;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalTime;
 
 public class Provider {
@@ -10,13 +11,16 @@ public class Provider {
     private LocalTime openingHours;
     private BigDecimal depositRate;
     private ValuationPolicy valuationPolicy;
+    private PricingPolicy pricingPolicy;
     
-    public Provider(String name, Location location, LocalTime openingHours, BigDecimal depositRate, ValuationPolicy valuationPolicy) {
+    public Provider(String name, Location location, LocalTime openingHours, 
+            BigDecimal depositRate, ValuationPolicy valuationPolicy, PricingPolicy pricingPolicy) {
         this.name = name;
         this.location = location;
         this.openingHours = openingHours;
         this.depositRate = depositRate;
         this.valuationPolicy = valuationPolicy;
+        this.pricingPolicy = pricingPolicy;
     }
     
     public String getName() {
@@ -39,9 +43,8 @@ public class Provider {
         return valuationPolicy;
     }
     
-    //TODO: Check to be confirmed if obtaining bike price should be in Bike or BikeType
-    public void setPrice(Bike bike) {
-        bike.bikePrice = bike.getBikePrice();
+    public PricingPolicy getPricingPolicy() {
+        return pricingPolicy;
     }
     
     public void setDepositRate(BigDecimal newDepositRate) {
@@ -50,6 +53,11 @@ public class Provider {
     
     public void setValuationPolicy(ValuationPolicy valuationPolicy) {
         this.valuationPolicy = valuationPolicy;
+    }
+    
+    //Assume PricingPolicy is default in this scenario
+    public void setPricingPolicy(PricingPolicy pricingPolicy) {
+        this.pricingPolicy = pricingPolicy;
     }
     
     //Assume the Provider wants to handle return of the bikes- setting if bike is available for rent

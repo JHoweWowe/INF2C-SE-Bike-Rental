@@ -4,6 +4,7 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -45,8 +46,6 @@ public class SystemTests {
     private DateRange requestedDates;
     private Map<BikeType, Integer> requestedMapOfBikes;
     private boolean requestDelivery;
-    private BigDecimal totalPrice;
-    private BigDecimal totalDepositAmount;
     
     //Creation of Customer and Booking objects
     private Customer customerWithNoBooking;
@@ -54,8 +53,14 @@ public class SystemTests {
     private Booking booking1;
     private Booking booking2;
     
-    
+    //Declaration of Pricing and Valuation policies
+    private DefaultPricingPolicy defaultPricePolicy;
     private ValuationPolicy valuationPolicy;
+    private LinearDepreciationValuationPolicy LDValuationPolicy1;
+    private DoubleDepreciationValuationPolicy DDValuationPolicy1;
+    
+    private BigDecimal totalPriceforQuote;
+    private BigDecimal totalDepositAmountforQuote;
     
     @BeforeEach
     void setUp() throws Exception {
@@ -63,10 +68,13 @@ public class SystemTests {
         // Setup mock delivery service before each tests
         DeliveryServiceFactory.setupMockDeliveryService();
         
-        // Setup default values for now without integrating mock prices
-        totalPrice = new BigDecimal(600);
-        totalDepositAmount = new BigDecimal(120);
-        
+        // Integration of the pricing and valuation policy
+        defaultPricePolicy = new DefaultPricingPolicy();
+        totalPriceforQuote = new BigDecimal(0);
+        totalDepositAmountforQuote = new BigDecimal(0);
+        LDValuationPolicy1 = new LinearDepreciationValuationPolicy(new BigDecimal(0.1));
+        DDValuationPolicy1 = new DoubleDepreciationValuationPolicy(new BigDecimal(0.1));
+
         // Instantiating the input and output quotes
         inputQuotes = new ArrayList<Quote>();
         expectedOutputQuotes = new ArrayList<Quote>();
@@ -82,15 +90,15 @@ public class SystemTests {
         bikeCollection8 = new ArrayList<Bike>();
 
         // Instantiate bikeType objects
-        // Structure example- The bikeType name is "Trek" and original replacement value is 900
-        bikeType1 = new BikeType("Mountain bike",new BigDecimal(900));
-        bikeType2 = new BikeType("Road bike",new BigDecimal(600));
-        bikeType3 = new BikeType("E-Bike",new BigDecimal(300));
-        bikeType4 = new BikeType("Hybrid bike",new BigDecimal(450));
-        bikeType5 = new BikeType("BMX",new BigDecimal(750));
-        bikeType6 = new BikeType("Commuting bike",new BigDecimal(400));
-        bikeType7 = new BikeType("Folding bike",new BigDecimal(550));
-        bikeType8 = new BikeType("Track bike",new BigDecimal(650));
+        // Structure example- The bikeType name is "Trek" and original replacement value is 900 and price is 450
+        bikeType1 = new BikeType("Mountain bike",new BigDecimal(900),new BigDecimal(12));
+        bikeType2 = new BikeType("Road bike",new BigDecimal(900),new BigDecimal(15));
+        bikeType3 = new BikeType("E-Bike",new BigDecimal(900), new BigDecimal(10));
+        bikeType4 = new BikeType("Hybrid bike",new BigDecimal(450), new BigDecimal(5));
+        bikeType5 = new BikeType("BMX",new BigDecimal(750), new BigDecimal(10));
+        bikeType6 = new BikeType("Commuting bike",new BigDecimal(400), new BigDecimal(8));
+        bikeType7 = new BikeType("Folding bike",new BigDecimal(550), new BigDecimal(9));
+        bikeType8 = new BikeType("Track bike",new BigDecimal(650), new BigDecimal(10));
         
         // Create Location objects with postcode and address- used for BikeProvider store location
         Location loc1 = new Location("EH16 5AY","Pollock Halls");
@@ -103,14 +111,14 @@ public class SystemTests {
         Location loc8 = new Location("EH9 1UU","250 Causewayside");
         
         // Create Provider objects- in this scenario assume opening hours is 9am
-        bikeProvider1 = new Provider("Cycles4Hire",loc1,LocalTime.of(9, 00),new BigDecimal(0.3),valuationPolicy);
-        bikeProvider2 = new Provider("Dales Cycles Ltd",loc2,LocalTime.of(9, 00),new BigDecimal(0.2),valuationPolicy);
-        bikeProvider3 = new Provider("Edinburgh Bicycle Co-operative",loc3,LocalTime.of(9,00),new BigDecimal(0.1),valuationPolicy);
-        bikeProvider4 = new Provider("Berwick Cycles",loc4,LocalTime.of(9, 00),new BigDecimal(0.25),valuationPolicy);
-        bikeProvider5 = new Provider("Brick Lane Bikes",loc5,LocalTime.of(9, 00),new BigDecimal(0.15),valuationPolicy);
-        bikeProvider6 = new Provider("Cycle Centre",loc6,LocalTime.of(9, 00),new BigDecimal(0.2),valuationPolicy);
-        bikeProvider7 = new Provider("Cycle Republic",loc7,LocalTime.of(9, 00),new BigDecimal(0.07),valuationPolicy);
-        bikeProvider8 = new Provider("The Bike Station",loc8,LocalTime.of(9, 00),new BigDecimal(0.15),valuationPolicy);
+        bikeProvider1 = new Provider("Cycles4Hire",loc1,LocalTime.of(9, 00),new BigDecimal(0.2),LDValuationPolicy1,defaultPricePolicy);
+        bikeProvider2 = new Provider("Dales Cycles Ltd",loc2,LocalTime.of(9, 00),new BigDecimal(0.2),DDValuationPolicy1,defaultPricePolicy);
+        bikeProvider3 = new Provider("Edinburgh Bicycle Co-operative",loc3,LocalTime.of(9,00),new BigDecimal(0.2),LDValuationPolicy1,defaultPricePolicy);
+        bikeProvider4 = new Provider("Berwick Cycles",loc4,LocalTime.of(9, 00),new BigDecimal(0.25),DDValuationPolicy1,defaultPricePolicy);
+        bikeProvider5 = new Provider("Brick Lane Bikes",loc5,LocalTime.of(9, 00),new BigDecimal(0.15),valuationPolicy,defaultPricePolicy);
+        bikeProvider6 = new Provider("Cycle Centre",loc6,LocalTime.of(9, 00),new BigDecimal(0.2),valuationPolicy,defaultPricePolicy);
+        bikeProvider7 = new Provider("Cycle Republic",loc7,LocalTime.of(9, 00),new BigDecimal(0.07),valuationPolicy,defaultPricePolicy);
+        bikeProvider8 = new Provider("The Bike Station",loc8,LocalTime.of(9, 00),new BigDecimal(0.15),valuationPolicy,defaultPricePolicy);
         
         // Prepare data for List of bike Collection booked dates 
         bikeCollection1BookedDates = new ArrayList<DateRange>();
@@ -146,48 +154,48 @@ public class SystemTests {
          * In addition, each bike collection size may be more than 1
          */
         //Assume for simplification purposes, the bike price is 900
-        bikeCollection1.add(new Bike(bikeType1,3,new BigDecimal(900),bikeProvider1,bikeCollection1BookedDates));
-        bikeCollection1.add(new Bike(bikeType1,3,new BigDecimal(900),bikeProvider1,bikeCollection1BookedDates));
+        bikeCollection1.add(new Bike(bikeType1,3,bikeProvider1,bikeCollection1BookedDates));
+        bikeCollection1.add(new Bike(bikeType1,3,bikeProvider1,bikeCollection1BookedDates));
         
         //BikeCollection 4 has 2 bikeType2 bikes and 2 bikeType4 bikes
-        bikeCollection2.add(new Bike(bikeType2,3,new BigDecimal(600),bikeProvider2,bikeCollection2BookedDates));
-        bikeCollection2.add(new Bike(bikeType2,3,new BigDecimal(600),bikeProvider2,bikeCollection2BookedDates));
-        bikeCollection2.add(new Bike(bikeType4,3,new BigDecimal(600),bikeProvider2,bikeCollection2BookedDates));
-        bikeCollection2.add(new Bike(bikeType4,3,new BigDecimal(600),bikeProvider2,bikeCollection2BookedDates));
+        bikeCollection2.add(new Bike(bikeType2,3,bikeProvider2,bikeCollection2BookedDates));
+        bikeCollection2.add(new Bike(bikeType2,3,bikeProvider2,bikeCollection2BookedDates));
+        bikeCollection2.add(new Bike(bikeType4,3,bikeProvider2,bikeCollection2BookedDates));
+        bikeCollection2.add(new Bike(bikeType4,3,bikeProvider2,bikeCollection2BookedDates));
  
-        //BE CAREFUL: bikeCollection3 has 2 bikeType1
-        bikeCollection3.add(new Bike(bikeType3,3,new BigDecimal(300),bikeProvider3,bikeCollection3BookedDates));
-        bikeCollection3.add(new Bike(bikeType3,3,new BigDecimal(300),bikeProvider3,bikeCollection3BookedDates));
+        //BE CAREFUL: bikeCollection3 has 2 bikeType3
+        bikeCollection3.add(new Bike(bikeType3,3,bikeProvider3,bikeCollection3BookedDates));
+        bikeCollection3.add(new Bike(bikeType3,3,bikeProvider3,bikeCollection3BookedDates));
         
         //BikeCollection 4 has 2 bikeType 1 and 1 bikeType 4
-        bikeCollection4.add(new Bike(bikeType2,3,new BigDecimal(300),bikeProvider4,bikeCollection4BookedDates));
-        bikeCollection4.add(new Bike(bikeType2,3,new BigDecimal(300),bikeProvider4,bikeCollection4BookedDates));
-        bikeCollection4.add(new Bike(bikeType4,3,new BigDecimal(300),bikeProvider4,bikeCollection4BookedDates));
+        bikeCollection4.add(new Bike(bikeType2,3,bikeProvider4,bikeCollection4BookedDates));
+        bikeCollection4.add(new Bike(bikeType2,3,bikeProvider4,bikeCollection4BookedDates));
+        bikeCollection4.add(new Bike(bikeType4,3,bikeProvider4,bikeCollection4BookedDates));
         
-        bikeCollection5.add(new Bike(bikeType1,3,new BigDecimal(300),bikeProvider5,bikeCollection5BookedDates));
-        bikeCollection5.add(new Bike(bikeType1,3,new BigDecimal(300),bikeProvider5,bikeCollection5BookedDates));
+        bikeCollection5.add(new Bike(bikeType1,3,bikeProvider5,bikeCollection5BookedDates));
+        bikeCollection5.add(new Bike(bikeType1,3,bikeProvider5,bikeCollection5BookedDates));
 
-        bikeCollection6.add(new Bike(bikeType6,3,new BigDecimal(450),bikeProvider6,bikeCollection6BookedDates));
+        bikeCollection6.add(new Bike(bikeType6,3,bikeProvider6,bikeCollection6BookedDates));
         
         //BE CAREFUL: bikeCollection7 has 2 bikeType1 and 1 bikeType 2
-        bikeCollection7.add(new Bike(bikeType1,3,new BigDecimal(300),bikeProvider4,bikeCollection4BookedDates));
-        bikeCollection7.add(new Bike(bikeType1,3,new BigDecimal(300),bikeProvider4,bikeCollection4BookedDates));
-        bikeCollection7.add(new Bike(bikeType2,3,new BigDecimal(300),bikeProvider4,bikeCollection4BookedDates));
+        bikeCollection7.add(new Bike(bikeType1,3,bikeProvider4,bikeCollection4BookedDates));
+        bikeCollection7.add(new Bike(bikeType1,3,bikeProvider4,bikeCollection4BookedDates));
+        bikeCollection7.add(new Bike(bikeType2,3,bikeProvider4,bikeCollection4BookedDates));
         
         //BE CAREFUL: bikeCollection8 has 2 bikeType1 and 1 bikeType 2
-        bikeCollection8.add(new Bike(bikeType1,3,new BigDecimal(450),bikeProvider8,bikeCollection8BookedDates));
-        bikeCollection8.add(new Bike(bikeType1,3,new BigDecimal(450),bikeProvider8,bikeCollection8BookedDates));
+        bikeCollection8.add(new Bike(bikeType1,3,bikeProvider8,bikeCollection8BookedDates));
+        bikeCollection8.add(new Bike(bikeType1,3,bikeProvider8,bikeCollection8BookedDates));
 
-
-        // Instantiate testQuote objects
-        testQuote1 = new Quote(bikeProvider1,bikeCollection1,totalPrice,totalDepositAmount);
-        testQuote2 = new Quote(bikeProvider2,bikeCollection2,totalPrice,new BigDecimal(480));
-        testQuote3 = new Quote(bikeProvider3,bikeCollection3,totalPrice,new BigDecimal(480));
-        testQuote4 = new Quote(bikeProvider4,bikeCollection4,totalPrice,new BigDecimal(480));
-        testQuote5 = new Quote(bikeProvider5,bikeCollection5,totalPrice,new BigDecimal(480));
-        testQuote6 = new Quote(bikeProvider6,bikeCollection6,totalPrice,new BigDecimal(480));
-        testQuote7 = new Quote(bikeProvider7,bikeCollection7,totalPrice,new BigDecimal(480));
-        testQuote8 = new Quote(bikeProvider8,bikeCollection8,totalPrice,new BigDecimal(480));
+        // Instantiate testQuote objects where totalPrice and totalDepositAmount in that quote is 0 for now
+        // It needs a requestedDates value to be fully implemented in each of the SystemTests required
+        testQuote1 = new Quote(bikeProvider1,bikeCollection1,totalPriceforQuote,totalDepositAmountforQuote);
+        testQuote2 = new Quote(bikeProvider2,bikeCollection2,totalPriceforQuote,totalDepositAmountforQuote);
+        testQuote3 = new Quote(bikeProvider3,bikeCollection3,totalPriceforQuote,totalDepositAmountforQuote);
+        testQuote4 = new Quote(bikeProvider4,bikeCollection4,totalPriceforQuote,totalDepositAmountforQuote);
+        testQuote5 = new Quote(bikeProvider5,bikeCollection5,totalPriceforQuote,totalDepositAmountforQuote);
+        testQuote6 = new Quote(bikeProvider6,bikeCollection6,totalPriceforQuote,totalDepositAmountforQuote);
+        testQuote7 = new Quote(bikeProvider7,bikeCollection7,totalPriceforQuote,totalDepositAmountforQuote);
+        testQuote8 = new Quote(bikeProvider8,bikeCollection8,totalPriceforQuote,totalDepositAmountforQuote);
         
         // Verify that each test quote is not null before testing
         assertNotNull(testQuote1);
@@ -208,8 +216,66 @@ public class SystemTests {
     
     //System tests are established as a whole
     //Note: Each collection of bikes is under 1 provider
+    @Test
+    void defaultPricePolicyTestWith1BikeType() {
+        requestedDates = new DateRange(LocalDate.of(2018, 1, 5), LocalDate.of(2018, 1, 8));
+        defaultPricePolicy = new DefaultPricingPolicy();
+        
+        assertEquals(new BigDecimal(72),defaultPricePolicy.calculatePrice(bikeCollection1, requestedDates));
+    }
+    @Test
+    void defaultPricePolicyTestWith2BikeTypes() {
+        requestedDates = new DateRange(LocalDate.of(2018, 1, 5), LocalDate.of(2018, 1, 10));
+        defaultPricePolicy = new DefaultPricingPolicy();
+        
+        assertEquals(new BigDecimal(200),defaultPricePolicy.calculatePrice(bikeCollection2, requestedDates));
+    }
+    //A SystemTest where default pricing policy and Linear Valuation policy behavior is implemented
+    //
+    @Test
+    void calculateTotalPriceAndTotalDepositAmountForQuote1() {
+        requestedDates = new DateRange(LocalDate.of(2016, 1, 5), LocalDate.of(2016, 1, 8));
+        defaultPricePolicy = new DefaultPricingPolicy();
+        
+        totalPriceforQuote = defaultPricePolicy.calculatePrice(bikeCollection1, requestedDates);
+        for (Bike bike : bikeCollection1) {
+            totalDepositAmountforQuote = totalDepositAmountforQuote.add(testQuote1.getProvider().getValuationPolicy()
+                    .calculateValue(bike, requestedDates.getStart()).multiply(testQuote1.getProvider().getDepositRate()));
+        }
+        totalDepositAmountforQuote = totalDepositAmountforQuote.setScale(2,RoundingMode.HALF_EVEN);
+        testQuote1 = new Quote(bikeProvider1,bikeCollection1,totalPriceforQuote,totalDepositAmountforQuote);
+
+        
+        assertEquals(new BigDecimal(72),testQuote1.getTotalPrice());
+        assertEquals(new BigDecimal("252.00"),testQuote1.getTotalDepositAmount());
+        
+    }
     
-    //Should filter out quotes which are not near the given location
+    //Used for the booking
+    @Test
+    void CalculateDepositWithLinearValuationPolicy() {        
+        LocalDate date = LocalDate.of(2016, 3, 3);
+        //Takes the first element in the first Bike collection for testing purposes
+        Bike bike = bikeCollection1.iterator().next();
+        
+        BigDecimal depositAmount = testQuote1.getProvider().getValuationPolicy()
+                .calculateValue(bike, date).multiply(testQuote1.getProvider().getDepositRate());
+        depositAmount = depositAmount.setScale(2,RoundingMode.HALF_EVEN);
+
+        assertEquals(new BigDecimal("126.00"),depositAmount);
+    }
+    @Test
+    void CalculateDepositWithDoubleDepreciationValuationPolicy() {
+        LocalDate date = LocalDate.of(2016, 3, 3);
+        //Takes first element in second Bike collection for testing purposes
+        Bike bike = bikeCollection2.iterator().next();
+        
+        BigDecimal depositAmount = testQuote2.getProvider().getValuationPolicy()
+                .calculateValue(bike, date).multiply(testQuote2.getProvider().getDepositRate());
+        depositAmount = depositAmount.setScale(2,RoundingMode.HALF_EVEN);
+        
+        assertEquals(new BigDecimal("92.16"),depositAmount);
+    }
     @Test
     void doesFilterByProviderWithOneQuote() {
         givenLocation = new Location("NE42 5FJ", "Tilley Cres");
@@ -359,7 +425,7 @@ public class SystemTests {
         
         assertEquals(expectedOutputQuotes, customerWithNoBooking.findQuote(inputQuotes, requestedData));    
     }
-    //No possible quotes to be found
+    //System should return no possible quotes to be found
     @Test
     void findQuotesTest2() {
         givenLocation = new Location("G12 8QQ", "University Ave");
@@ -416,8 +482,8 @@ public class SystemTests {
         //Check if the details of each quote correspond to the correct booking details
         assertEquals(0, booking1.getBookingNumber());
         assertEquals(bikeProvider1, booking1.getQuote().getProvider());
-        assertEquals(totalPrice, booking1.getQuote().getTotalPrice());
-        assertEquals(totalDepositAmount, booking1.getQuote().getTotalDepositAmount());
+        assertEquals(totalPriceforQuote, booking1.getQuote().getTotalPrice());
+        assertEquals(totalDepositAmountforQuote, booking1.getQuote().getTotalDepositAmount());
         
         //Check if all bikes in that quote is not available for rent
         for (Bike bike : booking1.getQuote().getCollectionOfBikes()) {
@@ -426,31 +492,87 @@ public class SystemTests {
     }
     //Check status if each bike is booked with delivery implementation
     @Test
-    void bookQuoteDeliveryRequiredWithOneBike() {
+    void bookQuoteDeliveryRequiredWithLinearDepreciationTest1() {
         requestDelivery = true;
-        requestedDates = new DateRange(LocalDate.of(2019, 2, 1),LocalDate.of(2019, 2, 28));
-        booking1 = new Booking(requestedDates, testQuote1, 1);
+        requestedDates = new DateRange(LocalDate.of(2016, 2, 1),LocalDate.of(2016, 2, 5));
         
-        List<Bike> listOfBikes = new ArrayList<Bike>();
-        for (Bike bike : testQuote1.getCollectionOfBikes()) {
-            listOfBikes.add(bike);
+        //The total price and deposit amount for the quote should be integrated
+        defaultPricePolicy = new DefaultPricingPolicy();
+        totalPriceforQuote = defaultPricePolicy.calculatePrice(bikeCollection3, requestedDates);
+        for (Bike bike : bikeCollection3) {
+            totalDepositAmountforQuote = totalDepositAmountforQuote.add(testQuote3.getProvider().getValuationPolicy()
+                    .calculateValue(bike, requestedDates.getStart()).multiply(testQuote3.getProvider().getDepositRate()));
         }
+        totalDepositAmountforQuote = totalDepositAmountforQuote.setScale(2,RoundingMode.HALF_EVEN);
         
-        Bike bike1 = new Bike(bikeType1,3,new BigDecimal(900),bikeProvider1,bikeCollection1BookedDates);
+        testQuote3 = new Quote(bikeProvider3,bikeCollection3,totalPriceforQuote,totalDepositAmountforQuote);
+        //From that testQuote which now has the proper total price and total deposit amount, a Booking object is now created
+        booking1 = new Booking(requestedDates, testQuote3, 1);
+        
+        Bike bike1 = new Bike(bikeType3,3,bikeProvider3,bikeCollection3BookedDates);
                 
         customerWithBooking = new Customer(booking1, requestDelivery);
-        customerWithBooking.bookQuote(testQuote1, requestedDates);
+        customerWithBooking.bookQuote(testQuote3, requestedDates);
 
-        
         MockDeliveryService deliveryService = new MockDeliveryService();
         deliveryService.scheduleDelivery(bike1, givenLocation, givenLocation, requestedDates.getStart());
         
-        System.out.println(deliveryService.pickups);
+        //Check if the DeliveryService collected in the Map of pickUps is the same
+        //as the delivery of pickups
+        assertEquals(deliveryService.getPickupsOn(requestedDates.getStart()), 
+                deliveryService.pickups.get(requestedDates.getStart()));
         
-        System.out.println(deliveryService.getPickupsOn(requestedDates.getStart()));
-        
-        System.out.println(testQuote1.getCollectionOfBikes().stream().findFirst());
+        //Check if the details of each quote correspond to the correct booking details
+        assertEquals(1, booking1.getBookingNumber());
+        assertEquals(bikeProvider3, booking1.getQuote().getProvider());
 
+        assertEquals(new BigDecimal(80),testQuote3.getTotalPrice());
+        assertEquals(new BigDecimal("252.00"),testQuote3.getTotalDepositAmount());
+        assertEquals(totalPriceforQuote, booking1.getQuote().getTotalPrice());
+        assertEquals(totalDepositAmountforQuote, booking1.getQuote().getTotalDepositAmount());
+        assertTrue(testQuote3.equals(booking1.getQuote()));
+    }
+    //Check status if each bike is booked with delivery implementation
+    @Test
+    void bookQuoteDeliveryRequiredWithDoubleDepreciationTest2() {
+        requestDelivery = true;
+        requestedDates = new DateRange(LocalDate.of(2016, 2, 1),LocalDate.of(2016, 2, 5));
+        
+        //The total price and deposit amount for the quote should be integrated
+        defaultPricePolicy = new DefaultPricingPolicy();
+        totalPriceforQuote = defaultPricePolicy.calculatePrice(bikeCollection4, requestedDates);
+        for (Bike bike : bikeCollection4) {
+            totalDepositAmountforQuote = totalDepositAmountforQuote.add(testQuote4.getProvider().getValuationPolicy()
+                    .calculateValue(bike, requestedDates.getStart()).multiply(testQuote4.getProvider().getDepositRate()));
+        }
+        totalDepositAmountforQuote = totalDepositAmountforQuote.setScale(2,RoundingMode.HALF_EVEN);
+        
+        testQuote4 = new Quote(bikeProvider4,bikeCollection4,totalPriceforQuote,totalDepositAmountforQuote);
+        //From that testQuote which now has the proper total price and total deposit amount, a Booking object is now created
+        booking1 = new Booking(requestedDates, testQuote4, 1);
+        
+        Bike bike1 = new Bike(bikeType4,3,bikeProvider4,bikeCollection4BookedDates);
+                
+        customerWithBooking = new Customer(booking1, requestDelivery);
+        customerWithBooking.bookQuote(testQuote4, requestedDates);
+
+        MockDeliveryService deliveryService = new MockDeliveryService();
+        deliveryService.scheduleDelivery(bike1, givenLocation, givenLocation, requestedDates.getStart());
+        
+        //Check if the DeliveryService collected in the Map of pickUps is the same
+        //as the delivery of pickups
+        assertEquals(deliveryService.getPickupsOn(requestedDates.getStart()), 
+                deliveryService.pickups.get(requestedDates.getStart()));
+        
+        //Check if the details of each quote correspond to the correct booking details
+        assertEquals(1, booking1.getBookingNumber());
+        assertEquals(bikeProvider4, booking1.getQuote().getProvider());
+
+        assertEquals(new BigDecimal(140),testQuote4.getTotalPrice());
+        assertEquals(new BigDecimal("288.00"),testQuote4.getTotalDepositAmount());
+        assertEquals(totalPriceforQuote, booking1.getQuote().getTotalPrice());
+        assertEquals(totalDepositAmountforQuote, booking1.getQuote().getTotalDepositAmount());
+        assertTrue(testQuote4.equals(booking1.getQuote()));
     }
     
 }

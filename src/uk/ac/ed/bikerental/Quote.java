@@ -64,7 +64,7 @@ public class Quote {
     public BigDecimal calculateTotalPrice(Collection<Bike> bikes) {
         totalPrice = new BigDecimal(0);
         for (Bike b : bikes) {
-            totalPrice.add(b.getBikePrice());
+            totalPrice.add(b.getBikeType().getBikeTypePrice());
         }
         return totalPrice;
     }

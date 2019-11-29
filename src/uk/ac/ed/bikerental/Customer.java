@@ -48,7 +48,6 @@ public class Customer {
                 DeliveryServiceFactory.getDeliveryService()
                 .scheduleDelivery(bike, quote.getProvider().getLocation(), quote.getProvider().getLocation(), dates.getStart());
             }
-            //Booking object should be updated by 1
             return bookingObject;
         }
         bookingObject.incrementBookingNumber();
