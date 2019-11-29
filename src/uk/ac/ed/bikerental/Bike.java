@@ -45,10 +45,15 @@ public class Bike implements Deliverable {
     
     public void addToBookedDates(DateRange dates) {
         bookedDates.add(dates);
+        this.isBooked = true;
     }
     
     public boolean isAvailableForRent() {
-        return isBooked;
+        return true;
+    }
+    
+    public boolean isNotAvailableForRent() {
+        return false;
     }
     
 

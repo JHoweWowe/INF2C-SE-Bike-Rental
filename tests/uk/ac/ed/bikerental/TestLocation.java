@@ -20,7 +20,7 @@ class TestLocation {
         location3 = new Location("EH7 6TQ", "Inchview Terrace");
         location4 = new Location("EX4 6JW", "University of Exeter");
         location5 = new Location("PH6 2PQ", "randomAddress");
-        location6 = new Location("EH12", "sameRandomAddress");
+        location6 = new Location("E", "sameRandomAddress");
         
         
         assertNotNull(location1);

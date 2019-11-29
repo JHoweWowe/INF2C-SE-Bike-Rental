@@ -49,9 +49,10 @@ public class Customer {
                 .scheduleDelivery(bike, quote.getProvider().getLocation(), quote.getProvider().getLocation(), dates.getStart());
             }
             //Booking object should be updated by 1
-            bookingObject.incrementBookingNumber();
             return bookingObject;
         }
+        bookingObject.incrementBookingNumber();
+        
         //Else only return just a booking without the delivery
         return bookingObject;
     }

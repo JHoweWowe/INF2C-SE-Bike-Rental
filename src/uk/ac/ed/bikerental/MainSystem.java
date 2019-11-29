@@ -79,23 +79,4 @@ public class MainSystem {
         return quotesToKeep;
       }
     
-    //Tester function
-    public static List<Quote> filterByNumType2(List<Quote> listOfQuotes, Map<BikeType,Integer> map) {
-        List<Quote> quotesToKeep = new ArrayList<Quote>();
-        Map<BikeType,Integer> bikeTypeMap = new HashMap<BikeType,Integer>();
-        for (Quote q : listOfQuotes) {
-            for (Bike bike : q.getCollectionOfBikes()) {
-                if (!bikeTypeMap.containsKey(bike.getBikeType())) { 
-                    bikeTypeMap.put(bike.getBikeType(),0);
-                }
-                bikeTypeMap.replace(bike.getBikeType(), bikeTypeMap.get(bike.getBikeType()) + 1);
-            }
-            if (bikeTypeMap.equals(map)) {
-                quotesToKeep.add(q);
-            }
-        }
-        return quotesToKeep;
-    }
-
-    
 }
