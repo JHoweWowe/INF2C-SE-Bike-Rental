@@ -7,8 +7,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,15 +61,19 @@ public class SystemTests {
     private ValuationPolicy valuationPolicy;
     private LinearDepreciationValuationPolicy LDValuationPolicy1;
     private DoubleDepreciationValuationPolicy DDValuationPolicy1;
-    
     private BigDecimal totalPriceforQuote;
     private BigDecimal totalDepositAmountforQuote;
+    
+    //Creating states for delivery
+    private Deque<Deliverable> deque;
     
     @BeforeEach
     void setUp() throws Exception {
         
         // Setup mock delivery service before each tests
         DeliveryServiceFactory.setupMockDeliveryService();
+        deque = new ArrayDeque<Deliverable>();
+
         
         // Integration of the pricing and valuation policy
         defaultPricePolicy = new DefaultPricingPolicy();
@@ -206,13 +213,7 @@ public class SystemTests {
         assertNotNull(testQuote6);
         assertNotNull(testQuote7);
         assertNotNull(testQuote8);
-        
-        //Data to be added into the input quotes (eg: inputQuotes.add...)
-        //Remodify SystemTests files
-
-        
     }
-    
     
     //System tests are established as a whole
     //Note: Each collection of bikes is under 1 provider
@@ -394,8 +395,6 @@ public class SystemTests {
         expectedOutputQuotes.add(testQuote4);
         
         assertEquals(expectedOutputQuotes, MainSystem.filterByNumType(inputQuotes, map));
-        
-        
     }
 
     //System test to find all the quotes which match the customer's criteria
@@ -573,6 +572,57 @@ public class SystemTests {
         assertEquals(totalPriceforQuote, booking1.getQuote().getTotalPrice());
         assertEquals(totalDepositAmountforQuote, booking1.getQuote().getTotalDepositAmount());
         assertTrue(testQuote4.equals(booking1.getQuote()));
+    }
+    //Assuming a booking has been already made for testing purposes
+    //Once the booking has been made, all of the bikes should be booked
+    //After the bikes are returned to the original provider, all bikes should no longer be booked
+    //and made available for rent
+    @Test
+    void returnBikesToOriginalProvider() {
+        requestDelivery = false;
+        requestedDates = new DateRange(LocalDate.of(2016, 2, 1),LocalDate.of(2016, 2, 5));
+        
+        testQuote1 = new Quote(bikeProvider1,bikeCollection1,totalPriceforQuote,totalDepositAmountforQuote);
+        booking1 = new Booking(requestedDates, testQuote1, 1);
+        
+        for (Bike bike : booking1.getQuote().getCollectionOfBikes()) {
+            assertEquals(true, bike.isBooked());
+        }
+        
+        bikeProvider1.acceptBikeReturn(booking1);
+        
+        for (Bike bike : booking1.getQuote().getCollectionOfBikes()) {
+            assertEquals(false, bike.isBooked());
+        }
+    }
+    //For testing purposes, the delivery service needs to be setup to test pickups and dropoffs
+    //Considering the bikes are returned to a different provider when customer requested delivery
+    @Test
+    void returnBikesToDifferentProvider() {
+        requestDelivery = true;
+        requestedDates = new DateRange(LocalDate.of(2016, 2, 1),LocalDate.of(2016, 2, 5));
+
+        testQuote2 = new Quote(bikeProvider2,bikeCollection2,totalPriceforQuote,totalDepositAmountforQuote);
+        booking1 = new Booking(requestedDates, testQuote2, 2);
+        
+        MockDeliveryService deliveryService = new MockDeliveryService();
+        for (Bike bike : booking1.getQuote().getCollectionOfBikes()) {
+            deliveryService.scheduleDelivery(bike, givenLocation, givenLocation, requestedDates.getStart());
+        }
+        deliveryService.carryOutPickups(requestedDates.getStart());
+        
+        for (Bike bike : booking1.getQuote().getCollectionOfBikes()) {
+            assertEquals(true, bike.isBooked());
+        }
+        bikeProvider2.acceptBikeReturn(booking1);
+        for (Bike bike : booking1.getQuote().getCollectionOfBikes()) {
+            assertEquals(false, bike.isBooked());
+        }
+        deliveryService.carryOutDropoffs();
+                
+        assertEquals(deque.isEmpty(),deliveryService.getDropoffs().isEmpty());
+
+        
     }
     
 }

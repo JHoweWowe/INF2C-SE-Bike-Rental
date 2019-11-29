@@ -12,6 +12,10 @@ public class Booking {
         this.bookingDates = bookingDates;
         this.quote = quote;
         this.bookingNumber = bookingNumber;
+        
+        for (Bike bike : quote.getCollectionOfBikes()) {
+            bike.setNotAvailableForRent();
+        }
     }
     
     public DateRange getBookingDates() {

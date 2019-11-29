@@ -42,12 +42,16 @@ public class Bike implements Deliverable {
         this.isBooked = true;
     }
     
-    public boolean isAvailableForRent() {
-        return true;
+    public boolean isBooked() {
+        return isBooked;
     }
     
-    public boolean isNotAvailableForRent() {
-        return false;
+    public void setAvailableForRent() {
+        isBooked = false;
+    }
+    
+    public void setNotAvailableForRent() {
+        isBooked = true;
     }
     
 

@@ -3,6 +3,7 @@ package uk.ac.ed.bikerental;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalTime;
+import java.util.Collection;
 
 public class Provider {
     
@@ -87,6 +88,15 @@ public class Provider {
             
         }
     }
+    //Helper function to allow the bikes to be return after booking has been made
+    public void acceptBikeReturn(Booking booking) {
+        Collection<Bike> bikeCollection = booking.getQuote().getCollectionOfBikes();
+        for (Bike bike : bikeCollection) {
+            bike.setAvailableForRent();
+        }
+    }
+    
+    
 
 
 }
