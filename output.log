@@ -1,0 +1,64 @@
+
+Thanks for using JUnit! Support its development at https://junit.org/sponsoring
+
+╷
+├─ JUnit Jupiter ✔
+│  ├─ TestDateRange ✔
+│  │  ├─ testToYears1() ✔
+│  │  ├─ testToYears3() ✔
+│  │  ├─ testDateRangeAreEqual() ✔
+│  │  ├─ testNoOverlap() ✔
+│  │  ├─ testDateRange1IsNextToDateRange2ButNoOverlap() ✔
+│  │  ├─ testDateRange2IsUndertestDateRange1() ✔
+│  │  ├─ testDateRange2OverlapsDateRange1() ✔
+│  │  └─ testDateRange1OverlapsDateRange2() ✔
+│  ├─ TestLocation ✔
+│  │  ├─ Location1isNearToLocation2() ✔
+│  │  ├─ Location1isNearToLocation3() ✔
+│  │  ├─ invalidPostCode() ✔
+│  │  ├─ Location1isNotNearToLocation4() ✔
+│  │  └─ Location1isNotNearToLocation5() ✔
+│  ├─ ValuationPolicyTests ✔
+│  │  ├─ The value of the bike with the linear depreciation rate cannot be negative ✔
+│  │  ├─ Linear Depreciation Case Test #1 ✔
+│  │  ├─ Linear Depreciation rate must be between 0 and 1 ✔
+│  │  ├─ Double Declining Balance Depreciation Case Test ✔
+│  │  └─ Double Declining Balance Depreciation rate is not between 0 and 1 ✔
+│  └─ SystemTests ✔
+│     ├─ filterByDateWithMultipleQuotes() ✔
+│     ├─ doesFilterByProviderWithOneQuote() ✔
+│     ├─ defaultPricePolicyTestWith1BikeType() ✔
+│     ├─ findQuotesTest1() ✔
+│     ├─ findQuotesTest2() ✔
+│     ├─ findQuotesTest3() ✔
+│     ├─ CalculateDepositWithDoubleDepreciationValuationPolicy() ✔
+│     ├─ filterByNumTypesWithMultipleQuotes() ✔
+│     ├─ defaultPricePolicyTestWith2BikeTypes() ✔
+│     ├─ returnBikesToDifferentProvider() ✔
+│     ├─ bookQuoteDeliveryRequiredWithLinearDepreciationTest1() ✔
+│     ├─ doesFilterByDateWithOneQuote() ✔
+│     ├─ CalculateDepositWithLinearValuationPolicy() ✔
+│     ├─ doesNotFilterByDateWithOneQuote() ✔
+│     ├─ calculateTotalPriceAndTotalDepositAmountForQuote1() ✔
+│     ├─ filterByNumTypesWithMultipleQuotesAndMap() ✔
+│     ├─ bookQuoteDeliveryRequiredWithDoubleDepreciationTest2() ✔
+│     ├─ filterByProviderWithMultipleQuotes() ✔
+│     ├─ bookQuoteNoDeliveryRequired() ✔
+│     ├─ doesNotFilterByProviderWithOneQuote() ✔
+│     └─ returnBikesToOriginalProvider() ✔
+└─ JUnit Vintage ✔
+
+Test run finished after 177 ms
+[         6 containers found      ]
+[         0 containers skipped    ]
+[         6 containers started    ]
+[         0 containers aborted    ]
+[         6 containers successful ]
+[         0 containers failed     ]
+[        39 tests found           ]
+[         0 tests skipped         ]
+[        39 tests started         ]
+[         0 tests aborted         ]
+[        39 tests successful      ]
+[         0 tests failed          ]
+
